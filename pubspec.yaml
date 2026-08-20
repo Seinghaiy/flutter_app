@@ -1,0 +1,29 @@
+name: coffee_shop_app
+description: A Flutter coffee shop application
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+  http: ^1.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  # No assets or fonts needed for the basic app
+
+assets:
+    - assets/images/           # All images in this folder
+    - assets/icons/            # All icons in this folder
+    # Or specify individual files:
+    # - assets/images/coffee.jpg
+    # - assets/images/logo.png
