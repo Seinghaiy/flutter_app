@@ -1,107 +1,144 @@
 import 'package:flutter/material.dart';
 import '../models/products.dart';
 import '../widgets/coffee_card.dart';
-import 'login_screen.dart';
+import 'package:coffee_shop_app/widgets/rating_stars.dart';
+import '../screens/login_screen.dart';
+import '../screens/register_screen.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
-  // Coffee list now built from the Product model instead of a raw Map.
-  static final List<Product> _coffees = [
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  // Sample products data
+  List<Product> products = [
     Product(
-      id: 1,
+      id: '1',
       name: 'Espresso',
-      description: 'Strong and bold shot of coffee',
+      description: 'Strong and bold',
       price: 3.50,
-      imageUrl: 'assets/images/coffee.jpg',
-      category: 'Hot',
+      imageUrl: 'assets/images/espresso.png',
+      rating: 4.5,
+      isFavorite: false,
     ),
     Product(
-      id: 2,
+      id: '2',
       name: 'Cappuccino',
-      description: 'Espresso with steamed milk foam',
+      description: 'Creamy and smooth',
       price: 4.50,
-      imageUrl: 'assets/images/coffee.jpg',
-      category: 'Hot',
+      imageUrl: 'assets/images/cappuccino.png',
+      rating: 4.8,
+      isFavorite: true,
     ),
-    Product(
-      id: 3,
-      name: 'Latte',
-      description: 'Espresso with lots of steamed milk',
-      price: 4.00,
-      imageUrl: 'assets/images/coffee.jpg',
-      category: 'Hot',
-    ),
-    Product(
-      id: 4,
-      name: 'Mocha',
-      description: 'Espresso with chocolate and milk',
-      price: 5.00,
-      imageUrl: 'assets/images/coffee.jpg',
-      category: 'Hot',
-    ),
+    // Add more products as needed
   ];
+
+  void toggleFavorite(String productId) {
+    setState(() {
+      final index = products.indexWhere((p) => p.id == productId);
+      if (index != -1) {
+        products[index] = products[index].copyWith(
+          isFavorite: !products[index].isFavorite,
+        );
+      }
+    });
+  }
+
+  void updateRating(String productId, double newRating) {
+    setState(() {
+      final index = products.indexWhere((p) => p.id == productId);
+      if (index != -1) {
+        products[index] = products[index].copyWith(
+          rating: newRating,
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('☕ Coffee Shop'),
-        backgroundColor: Colors.brown,
-        foregroundColor: Colors.white,
+        title: const Text('Coffee Shop'),
         actions: [
-          // Navigates to the Login screen.
+          // Optional: Filter by favorites
           IconButton(
-            icon: const Icon(Icons.login),
-            tooltip: 'Login',
+            icon: const Icon(Icons.favorite),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginScreen()),
-              );
+              // Show only favorites
             },
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: GridView.builder(
+        padding: const EdgeInsets.all(8.0),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 0.75,
+          crossAxisSpacing: 8.0,
+          mainAxisSpacing: 8.0,
+        ),
+        itemCount: products.length,
+        itemBuilder: (context, index) {
+          final product = products[index];
+          return CoffeeCard(
+            product: product,
+            onFavoriteTap: () => toggleFavorite(product.id),
+            onTap: () => _showProductDetail(context, product),
+          );
+        },
+      ),
+    );
+  }
+
+  void _showProductDetail(BuildContext context, Product product) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(20.0),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Our Coffees',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+            Text(
+              product.name,
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            // Interactive Rating in detail view
+            Row(
+              children: [
+                const Text('Rating: '),
+                RatingStars(
+                  rating: product.rating,
+                  interactive: true,
+                  onRatingChanged: (newRating) {
+                    updateRating(product.id, newRating);
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
             ),
             const SizedBox(height: 16),
-            Expanded(
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                  childAspectRatio: 0.8,
-                ),
-                itemCount: _coffees.length,
-                itemBuilder: (context, index) {
-                  final coffee = _coffees[index];
-
-                  return CoffeeCard(
-                    imagePath: coffee.imageUrl,
-                    name: coffee.name,
-                    price: '\$${coffee.price.toStringAsFixed(2)}',
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('You selected ${coffee.name}!'),
-                          backgroundColor: Colors.brown,
-                        ),
-                      );
-                    },
-                  );
-                },
+            Text('Price: \$${product.price.toStringAsFixed(2)}'),
+            const SizedBox(height: 16),
+            Text(product.description),
+            const SizedBox(height: 20),
+            // Favorite button in detail
+            ElevatedButton.icon(
+              onPressed: () {
+                toggleFavorite(product.id);
+                Navigator.pop(context);
+              },
+              icon: Icon(
+                product.isFavorite ? Icons.favorite : Icons.favorite_border,
+              ),
+              label: Text(
+                product.isFavorite ? 'Remove from Favorites' : 'Add to Favorites',
               ),
             ),
           ],

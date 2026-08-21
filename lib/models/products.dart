@@ -1,47 +1,40 @@
 class Product {
-  final int id;
+  final String id;
   final String name;
   final String description;
   final double price;
   final String imageUrl;
-  final String category;
-  final double rating;
-  final int reviews;
-
+  final double rating;        // Add this
+  final bool isFavorite;      // Add this
+  
   Product({
     required this.id,
     required this.name,
     required this.description,
     required this.price,
     required this.imageUrl,
-    required this.category,
     this.rating = 0.0,
-    this.reviews = 0,
+    this.isFavorite = false,
   });
-
-  factory Product.fromJson(Map<String, dynamic> json) {
+  
+  // Copy with method for updating properties
+  Product copyWith({
+    String? id,
+    String? name,
+    String? description,
+    double? price,
+    String? imageUrl,
+    double? rating,
+    bool? isFavorite,
+  }) {
     return Product(
-      id: json['id'] ?? 0,
-      name: json['name'] ?? 'Product Name',
-      description: json['description'] ?? 'Product Description',
-      price: (json['price'] ?? 0.0).toDouble(),
-      imageUrl: json['imageUrl'] ?? 'https://via.placeholder.com/200',
-      category: json['category'] ?? 'Uncategorized',
-      rating: (json['rating'] ?? 0.0).toDouble(),
-      reviews: json['reviews'] ?? 0,
+      id: id ?? this.id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      price: price ?? this.price,
+      imageUrl: imageUrl ?? this.imageUrl,
+      rating: rating ?? this.rating,
+      isFavorite: isFavorite ?? this.isFavorite,
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'description': description,
-      'price': price,
-      'imageUrl': imageUrl,
-      'category': category,
-      'rating': rating,
-      'reviews': reviews,
-    };
   }
 }
