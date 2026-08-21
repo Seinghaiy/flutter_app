@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../model/products.dart';
+import '../models/products.dart';
 import '../widgets/coffee_card.dart';
 import 'login_screen.dart';
 
