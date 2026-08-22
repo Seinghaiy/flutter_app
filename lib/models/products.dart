@@ -4,8 +4,8 @@ class Product {
   final String description;
   final double price;
   final String imageUrl;
-  final double rating;        // Add this
-  final bool isFavorite;      // Add this
+  final double rating;                                                          // Add this
+  final bool isFavorite;                                                       // Add this
   
   Product({
     required this.id,
@@ -17,7 +17,7 @@ class Product {
     this.isFavorite = false,
   });
   
-  // Copy with method for updating properties
+                                                                          // Copy with method for updating properties
   Product copyWith({
     String? id,
     String? name,

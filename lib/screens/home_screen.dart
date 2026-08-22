@@ -17,20 +17,38 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Product> products = [
     Product(
       id: '1',
-      name: 'Espresso',
-      description: 'Strong and bold',
-      price: 3.50,
-      imageUrl: 'assets/images/espresso.png',
+      name: 'Ice-Late',
+      description: 'jog brab tha emm',
+      price: 2.50,
+      imageUrl: 'assets/images/Iec-late.jpg',
       rating: 4.5,
       isFavorite: false,
     ),
     Product(
       id: '2',
-      name: 'Cappuccino',
-      description: 'Creamy and smooth',
+      name: 'Iced Caramel Latte',
+      description: 'Perk tv kom kvol ah chkae',
       price: 4.50,
-      imageUrl: 'assets/images/cappuccino.png',
+      imageUrl: 'assets/images/Iced Caramel Latte.jpg',
       rating: 4.8,
+      isFavorite: true,
+    ),
+    Product(
+      id: '3',
+      name: 'Iced Caramel Latte',
+      description: 'Perk tv kom kvol ah chkae',
+      price: 4.50,
+      imageUrl: 'assets/images/Iced Caramel Latte.jpg',
+      rating: 4.8,
+      isFavorite: true,
+    ),
+    Product(
+      id: '4',
+      name: 'Iced Caramel Latte',
+      description: 'Perk tv kom kvol ah chkae',
+      price: 4.50,
+      imageUrl: 'assets/images/Iced Caramel Latte.jpg',
+      rating: 4,
       isFavorite: true,
     ),
     // Add more products as needed
@@ -62,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Coffee Shop'),
+        title: const Text('☕Coffee Shop'),
         actions: [
           // Optional: Filter by favorites
           IconButton(
